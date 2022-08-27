@@ -13,6 +13,7 @@ exports.appointment = async (req, res) => {
         doctorID: req.body.doctorID, 
         date: req.body.date, 
         time: req.body.time,
+        status: req.body.status,
     })
 
     record
@@ -53,11 +54,7 @@ exports.delete = (req, res) => {
 exports.update= (req, res) => {
 
     let userId = req.params.id;
-    const {  patientNIC,
-        patientName,
-        doctorID, 
-        date, 
-        time, } = req.body;
+    const {  patientNIC, patientName, doctorID, date, time,status} = req.body;
 
     const updateappointment = {
         patientNIC,
@@ -65,6 +62,7 @@ exports.update= (req, res) => {
         doctorID, 
         date, 
         time,
+        status
 
     }
     appointment.findByIdAndUpdate(userId, updateappointment).then(() => {

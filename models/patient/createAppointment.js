@@ -21,7 +21,11 @@ const schema = mongoose.Schema({
     time: {
         type: String,
         require: true
-    }
+    },
+    status: {
+        type: String,
+        require: true
+    },
 
 })
 
