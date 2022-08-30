@@ -7,6 +7,7 @@ const appointment=require('../controllers/patient/appointment')
 
 router.post('/appointment', appointment.appointment)
 router.get('/appointment/:id', appointment.find)
+router.get('/appointment/byid/:id', appointment.findbyid)
 router.delete('/appointment/:id',  appointment.delete);
-router.put('/appointment/:id',  appointment.update);
+router.put('/appointment/update:id',  appointment.update);
 module.exports = router

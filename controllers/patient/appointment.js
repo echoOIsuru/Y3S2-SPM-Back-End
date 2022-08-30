@@ -14,6 +14,8 @@ exports.appointment = async (req, res) => {
         date: req.body.date, 
         time: req.body.time,
         status: req.body.status,
+        AID:req.body.AID,
+        doctorName:req.body.doctorName,
     })
 
     record
@@ -39,6 +41,36 @@ exports.find = (req, res) => {
     })
 }
 
+// exports.findbyid = (req, res) => {
+//     const id = req.params.id;
+
+//     appointment.findById({id}, (err, result) => {
+//         console.log("ggdg")
+//         if (err){
+//             res.send(err)
+//             console.log("d",err.message)
+//         }
+//             res.send(err)
+//         res.send(result)
+//         console.log("usdg")
+//     })
+// }
+exports.findbyid = async (req, res) => {
+
+    const StudentId = req.params.id;
+    try {
+        const Student = await appointment.findById(StudentId);
+        res.status(200).json(Student);
+
+        if (!Student) {
+            return res.status(404).json("No Student found for the given id!");
+        }
+    } catch (error) {
+        res.status(400).json(error);
+    }
+};
+
+
 exports.delete = (req, res) => {
 
     appointment.deleteOne({ _id: req.params.id }, (err, result) => {
@@ -54,7 +86,7 @@ exports.delete = (req, res) => {
 exports.update= (req, res) => {
 
     let userId = req.params.id;
-    const {  patientNIC, patientName, doctorID, date, time,status} = req.body;
+    const {  patientNIC, patientName, doctorID, date, time,status,AID, doctorName} = req.body;
 
     const updateappointment = {
         patientNIC,
@@ -62,8 +94,9 @@ exports.update= (req, res) => {
         doctorID, 
         date, 
         time,
-        status
-
+        status,
+        AID,
+        doctorName,
     }
     appointment.findByIdAndUpdate(userId, updateappointment).then(() => {
         res.status(200).send({ status: "successfully updated" })
