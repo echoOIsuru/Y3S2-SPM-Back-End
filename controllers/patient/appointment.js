@@ -55,6 +55,19 @@ exports.find = (req, res) => {
 //         console.log("usdg")
 //     })
 // }
+
+exports.findall = async (req, res) => {
+
+    try {
+        const students = await appointment.find();
+        res.status(200).json(students);
+    } catch (error) {
+        res.status(400).json(error);
+    }
+};
+
+
+
 exports.findbyid = async (req, res) => {
 
     const StudentId = req.params.id;
