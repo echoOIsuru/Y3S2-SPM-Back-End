@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
+//cured patients database schema
 const curedPatientsSchema = new Schema({
     patient_id: {
         type: String,

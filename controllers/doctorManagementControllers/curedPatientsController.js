@@ -1,5 +1,6 @@
 const CuredPatientsModel = require("../../models/doctorManagementModel/curedPatientsModel.js");
 
+//save newly added cured patient details to db
 const addCuredPatient = async (req, res) => {
     try {
         const {
@@ -44,6 +45,7 @@ const addCuredPatient = async (req, res) => {
     };
 };
 
+//get cured patients list
 const getCuredPatients = async (req, res) => {
 
     try {
@@ -54,7 +56,7 @@ const getCuredPatients = async (req, res) => {
     }
 };
 
-
+//get specific cured patient record by object id
 const getCuredPatientById = async (req, res) => {
 
     const curedPatientId = req.params.id;
@@ -70,7 +72,7 @@ const getCuredPatientById = async (req, res) => {
     }
 };
 
-
+//update a specific selected cured patient
 const updateCuredPatient = async (req, res) => {
 
     const curedPatientId = req.params.id;
@@ -94,6 +96,7 @@ const updateCuredPatient = async (req, res) => {
 
 };
 
+//delete a selected cured patient record
 const deleteCuredPatient = async (req, res) => {
 
     const curedPatientId = req.params.id;
@@ -113,7 +116,7 @@ const deleteCuredPatient = async (req, res) => {
     }
 };
 
-
+//get cured patients by their appointed doctor(byID)
 const getCuredPatientByDocId = async (req, res) => {
 
     const docId = req.params.id;

@@ -1,5 +1,6 @@
 const PatientMedicationsModel = require("../../models/doctorManagementModel/patientMedicationsModel.js");
 
+//add a medical record to a particular patient
 const addPatientMedication = async (req, res) => {
 
     try {
@@ -44,6 +45,7 @@ const addPatientMedication = async (req, res) => {
     };
 };
 
+//get all medication history
 const getPatientMedications = async (req, res) => {
 
     try {
@@ -54,7 +56,7 @@ const getPatientMedications = async (req, res) => {
     }
 };
 
-
+//get specific medical record by id
 const getPatientMedicationById = async (req, res) => {
     const patientMedicationId = req.params.id;
     try {
@@ -69,7 +71,7 @@ const getPatientMedicationById = async (req, res) => {
     }
 };
 
-
+//update a newly inserted medication record of a patient
 const updatePatientMedication = async (req, res) => {
 
     const patientMedicationId = req.params.id;
@@ -93,6 +95,7 @@ const updatePatientMedication = async (req, res) => {
 
 };
 
+//delete a newly inserted medication record
 const deletePatientMedication = async (req, res) => {
 
     const patientMedicationId = req.params.id;
@@ -112,6 +115,7 @@ const deletePatientMedication = async (req, res) => {
     }
 };
 
+//get all medication history by patient ID
 const getMedicationByPatient = async (req, res) => {
 
     const patientId = req.params.id;
