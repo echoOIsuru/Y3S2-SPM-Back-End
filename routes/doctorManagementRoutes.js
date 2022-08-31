@@ -2,6 +2,7 @@ const express = require('express');
 var router = express.Router();
 
 //All controllers related to cured patients functionality
+
 const { addCuredPatient,
     getCuredPatients,
     getCuredPatientById,
@@ -11,6 +12,7 @@ const { addCuredPatient,
 } = require('../controllers/doctorManagementControllers/curedPatientsController.js');
 
 //All controllers related to medication history functionality
+
 const { addPatientMedication,
     getPatientMedications,
     getPatientMedicationById,
