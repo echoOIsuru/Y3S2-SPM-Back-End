@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
+//patients medical history database schema
 const patientMedicationSchema = new Schema({
     appointment_id: {
         type: String,
