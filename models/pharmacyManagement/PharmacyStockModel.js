@@ -4,9 +4,7 @@ const {Schema} = mongoose;
 const PharmacyStockSchema = new Schema({
     medicine: {
         type: String,
-        required: true,
-        trim: true,
-        unique: true
+        required: true
     },
     quantity: {
         type: String,

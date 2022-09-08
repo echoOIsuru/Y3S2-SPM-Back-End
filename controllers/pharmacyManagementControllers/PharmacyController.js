@@ -54,6 +54,29 @@ exports.retrieveStocks = async (req, res) => {
 }
 
 /**
+ * Retrieve Medicine Stock Data
+ */
+ exports.retrieveStock = async (req, res) => {
+    const id = req.params.id;
+
+    PharmacyStockModel.find({"_id":id})
+        .then(data => {
+            if (!data) {
+                res.status(404).send({
+                    message: "Not Found Data With ID : " + id
+                });
+            }else{
+                res.send(data);
+            }
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: err.message || "Error Occured While Retrieving"
+            })
+        })
+}
+
+/**
  * Update Medicine Stock
  */
 exports.updateStock = async (req, res) => {

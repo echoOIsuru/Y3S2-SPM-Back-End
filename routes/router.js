@@ -11,6 +11,7 @@ const appointment=require('../controllers/patient/appointment')
  */
 router.post('/pm_add_stock', PharmacyController.addStock);
 router.get('/pm_get_stocks', PharmacyController.retrieveStocks);
+router.get('/pm_get_stock/:id', PharmacyController.retrieveStock);
 router.put('/pm_update_stock/:id', PharmacyController.updateStock);
 router.delete('/pm_delete_stock/:id', PharmacyController.deleteStock);
 
