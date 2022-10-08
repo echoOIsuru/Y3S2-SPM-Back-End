@@ -23,7 +23,7 @@ const addPatientMedication = async (req, res) => {
         })
 
         if (findPatientMedication.length > 0) {
-            return res.status(409).json({ message: appointment_id + " already exists! " });
+            return res.status(409).json({ message: "Record from Appointment ID " + appointment_id + " already exists in the system! " });
         }
 
         const patientMedications = new PatientMedicationsModel({
