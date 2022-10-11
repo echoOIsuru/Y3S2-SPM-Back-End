@@ -96,6 +96,39 @@ exports.delete = (req, res) => {
 
 
 
+
+
+exports.finddata = async (req, res) => {
+
+    // const StudentId = req.params.id;
+    try {
+        const Student = await appointment.aggregate([
+            { $count: "myCount" }
+            ]) 
+            console.log('Student');
+        res.status(200).json(Student);
+
+        if (!Student) {
+            return res.status(404).json("No Student found for the given id!");
+        }
+    } catch (error) {
+        res.status(400).json(error);
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 exports.update= (req, res) => {
 
     let userId = req.params.id;
