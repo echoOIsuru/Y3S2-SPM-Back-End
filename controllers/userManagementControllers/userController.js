@@ -16,7 +16,7 @@ exports.addUser = async (req, res) => {
         password: req.body.password,
         userType: req.body.userType,
         specialization: req.body.specialization,
-        date: new Date().toString()
+        date: new Date()
     })
 
     record
@@ -100,4 +100,33 @@ exports.getUserByCount = (req, res) => {
     } catch (error) {
         console.log(error);
     }
-}   
+}
+
+exports.getDoctorsBySpecial = (req, res) => {
+    const aggregatorOpts = [
+        {
+            $match: { "date": { $gte: new Date("2022-01-01"), $lt: new Date("2023-01-01") } }
+        },
+        {
+            $group: {
+                _id: {
+                    specialization: "$specialization",
+                    date: {
+                        $dateToString: { format: "%Y-%m-%d", date: "$date" }
+                    },
+                    value: { $sum: 1 },
+                }
+                // specialization: { $dateToString: { format: "%Y-%m-%d", date: "$date" }, }
+            }
+        }
+    ]
+    try {
+        userModel.aggregate(aggregatorOpts).exec((error, result) => {
+            if (error)
+                return response.send(error);
+            res.send(result)
+        })
+    } catch (error) {
+        console.log(error);
+    }
+}
