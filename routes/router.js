@@ -14,6 +14,7 @@ router.put('/user_um/:id', userController.updateUser);
 router.delete('/user_um/:id', userController.deleteUser);
 router.post('/user_validate', userController.login);
 router.get('/users_type', userController.getUserByCount);
+router.get('/doctors_by_special', userController.getDoctorsBySpecial);
 
 /**
  * Pharmacy management routes
