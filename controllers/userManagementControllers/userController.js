@@ -81,3 +81,23 @@ exports.login = (req, res) => {
         console.log(error);
     }
 }
+
+exports.getUserByCount = (req, res) => {
+    const aggregatorOpts = [
+        {
+            $group: {
+                _id: "$userType",
+                value: { $sum: 1 },
+            }
+        }
+    ]
+    try {
+        userModel.aggregate(aggregatorOpts).exec((error, result) => {
+            if (error)
+                return response.send(error);
+            res.send(result)
+        })
+    } catch (error) {
+        console.log(error);
+    }
+}   
