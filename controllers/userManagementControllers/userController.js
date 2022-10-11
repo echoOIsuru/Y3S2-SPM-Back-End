@@ -103,19 +103,24 @@ exports.getUserByCount = (req, res) => {
 }
 
 exports.getDoctorsBySpecial = (req, res) => {
+
+    const today = new Date()
+    const oneMonthAgo = new Date(today.getFullYear(), today.getMonth() - 1, today.getDate())
+
     const aggregatorOpts = [
         {
-            $match: { "date": { $gte: new Date("2022-01-01"), $lt: new Date("2023-01-01") } }
+            $match: { "date": { $gte: oneMonthAgo, $lt: new Date() } }
         },
         {
             $group: {
                 _id: {
                     specialization: "$specialization",
                     date: {
-                        $dateToString: { format: "%Y-%m-%d", date: "$date" }
+                        $dateToString: { format: "%m", date: "$date" }
                     },
-                    value: { $sum: 1 },
-                }
+
+                },
+                value: { $sum: 1 }
                 // specialization: { $dateToString: { format: "%Y-%m-%d", date: "$date" }, }
             }
         }
