@@ -118,3 +118,56 @@ exports.deleteStock = async (req, res) => {
             })
         })
 }
+
+/**
+ * Check medicine stock
+ */
+exports.checkMedicine = async (req, res) => {
+    const medicine = req.body.medicine;
+    // const quantity = req.body.quantity;
+
+    PharmacyStockModel.find({"medicine":medicine})
+        .then(data => {
+            if (!data) {
+                res.status(404).send({
+                    message: "Not Found Data With medicine called : " + medicine
+                });
+            }else{
+                res.send(data);
+            }
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: err.message || "Error Occured While Retrieving"
+            })
+        })
+}
+
+/**
+ * Add prescription
+ */
+exports.addPrescription = async (req, res) => {
+    if (!req.body) {
+        res.status(400).send({
+            message: "Content Cannot Be Empty"
+        });
+        return;
+    }
+
+    const record = new PharmacyPrescriptionModel({
+        user_id: req.body.id,
+        total_bill: req.body.total_bill,
+        added_date: req.body.added_date,
+        medicines: req.body.data
+    })
+
+    record.save(record)
+        .then(data => {
+            res.send(data)
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: err.message || "Error Occurred While Inserting"
+            })
+        })
+}
