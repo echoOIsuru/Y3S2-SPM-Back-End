@@ -1,5 +1,6 @@
 var PharmacyStockModel = require('../../models/pharmacyManagement/PharmacyStockModel');
 var PharmacyPrescriptionModel = require('../../models/pharmacyManagement/PharmacyPrescriptionModel');
+const PatientMedicationsModel = require("../../models/doctorManagementModel/patientMedicationsModel.js");
 
 /**
  * Add new medicine stock
@@ -154,20 +155,82 @@ exports.addPrescription = async (req, res) => {
         return;
     }
 
-    const record = new PharmacyPrescriptionModel({
-        user_id: req.body.id,
-        total_bill: req.body.total_bill,
-        added_date: req.body.added_date,
-        medicines: req.body.data
+    PatientMedicationsModel.find({"appointment_id":req.body.id})
+    .then(data => {
+        if (!data) {
+            res.status(404).send({
+                message: "Not Found Data With ID"
+            });
+        }else{
+
+            const record = new PharmacyPrescriptionModel({
+                id: req.body.id,
+                name: data[0].patient_name,
+                total_bill: req.body.total_bill,
+                added_date: req.body.added_date,
+                medicines: req.body.data
+            })
+        
+            record.save(record)
+                .then(data => {
+                    res.send(data)
+                })
+                .catch(err => {
+                    res.status(500).send({
+                        message: err.message || "Error Occurred While Inserting"
+                    })
+                })
+        }
+    })
+    .catch(err => {
+        res.status(500).send({
+            message: err.message || "Error Occured While Retrieving"
+        })
     })
 
-    record.save(record)
+}
+
+/**
+ * Get prescriptions
+ */
+exports.getPrescriptions = async(req, res) => {
+    PharmacyPrescriptionModel.find()
+    .then(data => {
+        if (!data) {
+            res.status(404).send({
+                message: "Not Found Data"
+            })
+        }else{
+            res.send(data);
+        }
+    })
+    .catch(err => {
+        res.status(500).send({
+            message: err.message || "Error Occured While Retrieving"
+        })
+    })
+}
+
+/**
+ * Get prescription's more details
+ */
+exports.getMoreDetails = async(req,res) => {
+    const id = req.params.id;
+
+    PharmacyPrescriptionModel.find({"_id":id})
         .then(data => {
-            res.send(data)
+            if (!data) {
+                res.status(404).send({
+                    message: "Not Found Data With ID : " + id
+                });
+            }else{
+                res.send(data);
+            }
         })
         .catch(err => {
             res.status(500).send({
-                message: err.message || "Error Occurred While Inserting"
+                message: err.message || "Error Occured While Retrieving"
             })
         })
 }
+
