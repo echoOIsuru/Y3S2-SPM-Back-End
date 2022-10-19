@@ -43,7 +43,7 @@ exports.retrieveStocks = async (req, res) => {
                 res.status(404).send({
                     message: "Not Found Data"
                 })
-            }else{
+            } else {
                 res.send(data);
             }
         })
@@ -57,16 +57,16 @@ exports.retrieveStocks = async (req, res) => {
 /**
  * Retrieve Medicine Stock Data
  */
- exports.retrieveStock = async (req, res) => {
+exports.retrieveStock = async (req, res) => {
     const id = req.params.id;
 
-    PharmacyStockModel.find({"_id":id})
+    PharmacyStockModel.find({ "_id": id })
         .then(data => {
             if (!data) {
                 res.status(404).send({
                     message: "Not Found Data With ID : " + id
                 });
-            }else{
+            } else {
                 res.send(data);
             }
         })
@@ -82,15 +82,15 @@ exports.retrieveStocks = async (req, res) => {
  */
 exports.updateStock = async (req, res) => {
 
-    try{
-        PharmacyStockModel.findByIdAndUpdate(req.params.id, req.body, async(err, result) => {
+    try {
+        PharmacyStockModel.findByIdAndUpdate(req.params.id, req.body, async (err, result) => {
             if (err) {
                 res.send(err);
-            }else{
+            } else {
                 await res.send(result);
             }
         })
-    }catch(err){
+    } catch (err) {
         console.log(err);
     }
 }
@@ -107,7 +107,7 @@ exports.deleteStock = async (req, res) => {
                 res.status(404).send({
                     message: `Cannot Delete with id : ${id}`
                 });
-            }else{
+            } else {
                 res.send({
                     message: "Record deleted successfully"
                 });
@@ -127,13 +127,13 @@ exports.checkMedicine = async (req, res) => {
     const medicine = req.body.medicine;
     // const quantity = req.body.quantity;
 
-    PharmacyStockModel.find({"medicine":medicine})
+    PharmacyStockModel.find({ "medicine": medicine })
         .then(data => {
             if (!data) {
                 res.status(404).send({
                     message: "Not Found Data With medicine called : " + medicine
                 });
-            }else{
+            } else {
                 res.send(data);
             }
         })
@@ -155,75 +155,52 @@ exports.addPrescription = async (req, res) => {
         return;
     }
 
-    PatientMedicationsModel.find({"appointment_id":req.body.id})
-    .then(data => {
-        if (!data) {
-            res.status(404).send({
-                message: "Not Found Data With ID"
-            });
-        }else{
+    PatientMedicationsModel.find({ "appointment_id": req.body.id })
+        .then(data => {
+            if (!data) {
+                res.status(404).send({
+                    message: "Not Found Data With ID"
+                });
+            } else {
 
-            const record = new PharmacyPrescriptionModel({
-                id: req.body.id,
-                name: data[0].patient_name,
-                total_bill: req.body.total_bill,
-                added_date: req.body.added_date,
-                medicines: req.body.data
-            })
-        
-            record.save(record)
-                .then(data => {
-                    res.send(data)
+                const record = new PharmacyPrescriptionModel({
+                    id: req.body.id,
+                    name: data[0].patient_name,
+                    total_bill: req.body.total_bill,
+                    added_date: req.body.added_date,
+                    medicines: req.body.data
                 })
-                .catch(err => {
-                    res.status(500).send({
-                        message: err.message || "Error Occurred While Inserting"
+
+                record.save(record)
+                    .then(data => {
+                        res.send(data)
                     })
-                })
-        }
-    })
-    .catch(err => {
-        res.status(500).send({
-            message: err.message || "Error Occured While Retrieving"
+                    .catch(err => {
+                        res.status(500).send({
+                            message: err.message || "Error Occurred While Inserting"
+                        })
+                    })
+            }
         })
-    })
+        .catch(err => {
+            res.status(500).send({
+                message: err.message || "Error Occured While Retrieving"
+            })
+        })
 
 }
 
 /**
  * Get prescriptions
  */
-exports.getPrescriptions = async(req, res) => {
+exports.getPrescriptions = async (req, res) => {
     PharmacyPrescriptionModel.find()
-    .then(data => {
-        if (!data) {
-            res.status(404).send({
-                message: "Not Found Data"
-            })
-        }else{
-            res.send(data);
-        }
-    })
-    .catch(err => {
-        res.status(500).send({
-            message: err.message || "Error Occured While Retrieving"
-        })
-    })
-}
-
-/**
- * Get prescription's more details
- */
-exports.getMoreDetails = async(req,res) => {
-    const id = req.params.id;
-
-    PharmacyPrescriptionModel.find({"_id":id})
         .then(data => {
             if (!data) {
                 res.status(404).send({
-                    message: "Not Found Data With ID : " + id
-                });
-            }else{
+                    message: "Not Found Data"
+                })
+            } else {
                 res.send(data);
             }
         })
@@ -234,3 +211,168 @@ exports.getMoreDetails = async(req,res) => {
         })
 }
 
+/**
+ * Get prescription's more details
+ */
+exports.getMoreDetails = async (req, res) => {
+    const id = req.params.id;
+
+    PharmacyPrescriptionModel.find({ "_id": id })
+        .then(data => {
+            if (!data) {
+                res.status(404).send({
+                    message: "Not Found Data With ID : " + id
+                });
+            } else {
+                res.send(data);
+            }
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: err.message || "Error Occured While Retrieving"
+            })
+        })
+}
+
+
+/**
+ * Get total no of prescriptions
+ */
+exports.getTotalPrescriptions = async (req, res) => {
+    const agg = [
+        {
+            $group: {
+                _id: null,
+                count: { $count: {} }
+            }
+        }
+    ]
+    try {
+        PharmacyPrescriptionModel.aggregate(agg).exec((error, result) => {
+            if (error)
+                return response.send(error);
+            res.send(result)
+        })
+    } catch (error) {
+        console.log(error);
+    }
+
+}
+
+/**
+ * Get total income
+ */
+exports.getTotalIncome = async (req, res) => {
+    const agg = [
+        {
+            $group: {
+                _id: null,
+                income: { $sum: { "$toDouble": "$total_bill" } }
+            }
+        }
+    ]
+    try {
+        PharmacyPrescriptionModel.aggregate(agg).exec((error, result) => {
+            if (error)
+                return response.send(error);
+            res.send(result)
+        })
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+/**
+ * Get total pharmacy users
+ */
+exports.getTotalUsers = async (req, res) => {
+    const agg = [
+        {
+            $group: {
+                _id: "$name",
+                count: { $count: {} }
+            }
+        }
+    ]
+    try {
+        PharmacyPrescriptionModel.aggregate(agg).exec((error, result) => {
+            if (error)
+                return response.send(error);
+            res.send(result)
+        })
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+/**
+ * Get total income
+ */
+exports.getMonthlyIncome = async (req, res) => {
+
+    const agg = [
+        {
+            $group: {
+                _id: {
+                    year: { $year: ({ $toDate: "$added_date" }) },
+                    month: { $month: ({ $toDate: "$added_date" }) }
+                },
+                income: { $sum: { "$toDouble": "$total_bill" } }
+            }
+        }
+    ]
+    try {
+        PharmacyPrescriptionModel.aggregate(agg).exec((error, result) => {
+            if (error)
+                return response.send(error);
+            res.send(result)
+        })
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+/**
+ * Get medicine stocks(out of stock soon)
+ */
+exports.getMedicines = async (req, res) => {
+
+    PharmacyStockModel.find({$expr: {$lte: [{ $toLong: "$quantity" }, 100]}})
+    .then(data => {
+        if (!data) {
+            res.status(404).send({
+                message: "Not Found Data"
+            });
+        } else {
+            res.send(data);
+        }
+    })
+    .catch(err => {
+        res.status(500).send({
+            message: err.message || "Error Occured While Retrieving"
+        })
+    })
+
+    // const agg = [
+    //     {
+    //         // $match: {$gt: [
+    //         //     {$convert:{ input: "$quantity", to: "int" }}, 100]}
+    //         $match: { "quantity": { $gt: [{ $toLong: "$quantity" }, 300] } }
+    //     },
+    //     {
+    //         $group: {
+    //             _id: "$medicine"
+    //         },
+    //         // qty: "$quantity"
+    //     }
+    // ]
+    // try {
+    //     PharmacyStockModel.aggregate(agg).exec((error, result) => {
+    //         if (error)
+    //             return response.send(error);
+    //         res.send(result)
+    //     })
+    // } catch (error) {
+    //     console.log(error);
+    // }
+}
