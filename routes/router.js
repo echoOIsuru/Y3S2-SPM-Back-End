@@ -2,7 +2,7 @@ const express = require('express');
 var router = express.Router();
 
 const test = require('../controllers/userManagementControllers/test')
-const d=require('../controllers/patient/d')
+const d = require('../controllers/patient/d')
 const userController = require('../controllers/userManagementControllers/userController')
 const PharmacyController = require('../controllers/pharmacyManagementControllers/PharmacyController')
 const appointment = require('../controllers/patient/appointment')
@@ -11,6 +11,7 @@ const appointment = require('../controllers/patient/appointment')
 //User Management Routers
 router.post('/user_um', userController.addUser);
 router.get('/all_users_um', userController.getAllUsers);
+router.get('/all_doctors', userController.getAllDoctors);
 router.put('/user_um/:id', userController.updateUser);
 router.delete('/user_um/:id', userController.deleteUser);
 router.post('/user_validate', userController.login);
@@ -40,7 +41,7 @@ router.get('/appointment/:id', appointment.find)
 router.get('/appointment/byid/:id', appointment.findbyid)
 router.get('/appointment', appointment.findall)
 
-router.put('/appointment/update/:id',  appointment.update);
+router.put('/appointment/update/:id', appointment.update);
 router.get('/appointment/d', appointment.finddata)
 
 router.post('/d/', d.d)
