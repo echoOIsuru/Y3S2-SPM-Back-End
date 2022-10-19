@@ -26,6 +26,13 @@ router.put('/pm_update_stock/:id', PharmacyController.updateStock);
 router.delete('/pm_delete_stock/:id', PharmacyController.deleteStock);
 router.post('/pm_check_medicine', PharmacyController.checkMedicine);
 router.post('/pm_add_prescription', PharmacyController.addPrescription);
+router.get('/pm_get_prescriptions', PharmacyController.getPrescriptions);
+router.get('/pm_get_more_details/:id', PharmacyController.getMoreDetails);
+router.get('/pm_get_total_prescriptions', PharmacyController.getTotalPrescriptions);
+router.get('/pm_get_total_income', PharmacyController.getTotalIncome);
+router.get('/pm_get_total_users', PharmacyController.getTotalUsers);
+router.get('/pm_get_monthly_income', PharmacyController.getMonthlyIncome);
+router.get('/pm_get_medicines', PharmacyController.getMedicines);
 
 
 router.post('/appointment', appointment.appointment)
