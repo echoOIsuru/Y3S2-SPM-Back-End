@@ -45,6 +45,19 @@ exports.getAllUsers = (req, res) => {
     }
 }
 
+exports.getAllDoctors = (req, res) => {
+    try {
+        userModel.find({ userType: 'doctor' }, (err, result) => {
+            if (err)
+                console.log(err);
+
+            res.send(result)
+        })
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 exports.updateUser = (req, res) => {
     try {
         userModel.findByIdAndUpdate(req.params.id, req.body, async (err, result) => {
