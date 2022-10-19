@@ -16,7 +16,7 @@ exports.addUser = async (req, res) => {
         password: req.body.password,
         userType: req.body.userType,
         specialization: req.body.specialization,
-        date: new Date().toString()
+        date: new Date()
     })
 
     record
@@ -75,6 +75,60 @@ exports.login = (req, res) => {
         userModel.findOne(req.body, (err, result) => {
             if (err)
                 console.log(err);
+            res.send(result)
+        })
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+exports.getUserByCount = (req, res) => {
+    const aggregatorOpts = [
+        {
+            $group: {
+                _id: "$userType",
+                value: { $sum: 1 },
+            }
+        }
+    ]
+    try {
+        userModel.aggregate(aggregatorOpts).exec((error, result) => {
+            if (error)
+                return response.send(error);
+            res.send(result)
+        })
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+exports.getDoctorsBySpecial = (req, res) => {
+
+    const today = new Date()
+    const oneMonthAgo = new Date(today.getFullYear(), today.getMonth() - 1, today.getDate())
+
+    const aggregatorOpts = [
+        {
+            $match: { "date": { $gte: oneMonthAgo, $lt: new Date() } }
+        },
+        {
+            $group: {
+                _id: {
+                    specialization: "$specialization",
+                    date: {
+                        $dateToString: { format: "%m", date: "$date" }
+                    },
+
+                },
+                value: { $sum: 1 }
+                // specialization: { $dateToString: { format: "%Y-%m-%d", date: "$date" }, }
+            }
+        }
+    ]
+    try {
+        userModel.aggregate(aggregatorOpts).exec((error, result) => {
+            if (error)
+                return response.send(error);
             res.send(result)
         })
     } catch (error) {

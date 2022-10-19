@@ -13,6 +13,11 @@ const schema = mongoose.Schema({
         type: String,
         require: true
     },
+    doctorName: {
+        type: String,
+        require: true
+    },
+    
     date: {
         type: String,
         require: true
@@ -26,7 +31,10 @@ const schema = mongoose.Schema({
         type: String,
         require: true
     },
-
+   AID: {
+        type: String,
+        require: true
+    },
 })
 
 const CreatePatientModel = mongoose.model('patient', schema);

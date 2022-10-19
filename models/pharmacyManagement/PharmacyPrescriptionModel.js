@@ -2,7 +2,11 @@ const mongoose = require('mongoose');
 const {Schema} = mongoose;
 
 const PharmacyPrescriptionSchema = new Schema({
-    user_id: {
+    id: {
+        type: String,
+        required: true
+    },
+    name: {
         type: String,
         required: true
     },
