@@ -2,6 +2,7 @@ const express = require('express');
 var router = express.Router();
 
 const test = require('../controllers/userManagementControllers/test')
+const d=require('../controllers/patient/d')
 const userController = require('../controllers/userManagementControllers/userController')
 const PharmacyController = require('../controllers/pharmacyManagementControllers/PharmacyController')
 const appointment = require('../controllers/patient/appointment')
@@ -34,9 +35,16 @@ router.get('/pm_get_total_users', PharmacyController.getTotalUsers);
 router.get('/pm_get_monthly_income', PharmacyController.getMonthlyIncome);
 router.get('/pm_get_medicines', PharmacyController.getMedicines);
 
-
-router.post('/appointment', appointment.appointment)
+router.post('/appointment/', appointment.appointment)
 router.get('/appointment/:id', appointment.find)
+router.get('/appointment/byid/:id', appointment.findbyid)
+router.get('/appointment', appointment.findall)
+
+router.put('/appointment/update/:id',  appointment.update);
+router.get('/appointment/d', appointment.finddata)
+
+router.post('/d/', d.d)
+router.get('/d/', d.findall)
 router.delete('/appointment/:id', appointment.delete);
 router.put('/appointment/:id', appointment.update);
 router.get('/appointmentsByDocId/:id', appointment.getDoctorsAppointments);
