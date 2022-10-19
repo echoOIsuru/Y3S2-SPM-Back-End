@@ -125,9 +125,9 @@ exports.deleteStock = async (req, res) => {
  */
 exports.checkMedicine = async (req, res) => {
     const medicine = req.body.medicine;
-    // const quantity = req.body.quantity;
+    const quantity = parseInt(req.body.quantity);
 
-    PharmacyStockModel.find({ "medicine": medicine })
+    PharmacyStockModel.find( {$and: [{ "medicine": medicine }, {$expr: {$gte: [{ $toInt: "$quantity" }, quantity]}} ]} )
         .then(data => {
             if (!data) {
                 res.status(404).send({
@@ -173,6 +173,13 @@ exports.addPrescription = async (req, res) => {
 
                 record.save(record)
                     .then(data => {
+
+                        // console.log(data.medicines);
+
+                        // data.medicines.forEach((i) => {
+                        //     PharmacyStockModel.updateOne({ medicine: i.medicine },{ $inc: { quantity: -i.quantity }})
+                        // })
+
                         res.send(data)
                     })
                     .catch(err => {
