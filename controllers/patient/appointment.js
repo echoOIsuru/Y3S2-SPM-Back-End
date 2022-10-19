@@ -153,3 +153,35 @@ exports.update= (req, res) => {
 
 }
 
+
+//get all students by id
+exports.getDoctorsAppointments = async (req, res) => {
+
+    const DoctorId = req.params.id;
+    try {
+        const appointments = await appointment.find({doctorID: DoctorId});
+        res.status(200).json(appointments);
+
+        if (!appointments) {
+            return res.status(404).json("No appointments found for the given doctor id!");
+        }
+    } catch (error) {
+        res.status(400).json(error);
+    }
+};
+
+//get appointment by id
+exports.getAppointmentById = async (req, res) => {
+
+    const appointmentId = req.params.id;
+    try {
+        const Appointment = await appointment.findById(appointmentId);
+        res.status(200).json(Appointment);
+
+        if (!Appointment) {
+            return res.status(404).json("No Appointment found for the given id!");
+        }
+    } catch (error) {
+        res.status(400).json(error);
+    }
+};

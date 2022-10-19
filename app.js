@@ -26,7 +26,7 @@ app.use(cors());
 //assign routers
 app.use("/api/v1", router);
 router.use(require('./routes/router.js'))
-
+router.use(require('./routes/doctorManagementRoutes.js'))
 
 app.listen(PORT, () => {
     console.log(`Server running on port http://localhost:${PORT}/api/v1`);
